@@ -897,6 +897,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+        #wheel-modal .modal-content {
+            width: min(96vw, 1760px);
+            height: min(94vh, 1080px);
+            max-width: 96vw;
+            max-height: 94vh;
+            padding: 28px 32px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+        }
+        .wheel-layout {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
         }
         .wheel-arrow-container {
             position: relative;
@@ -916,18 +937,22 @@
         }
         .wheel-nick-display {
             position: absolute;
-            top: -60px;
+            top: -74px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, var(--accent-neon-blue), rgba(255, 20, 147, 0.8));
             color: #fff;
-            padding: 10px 25px;
-            border-radius: 12px;
-            font-size: 22px;
+            padding: 12px 22px;
+            border-radius: 16px;
+            font-size: clamp(20px, 2vw, 30px);
             font-weight: 900;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
+            text-transform: none;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.15;
+            max-width: min(72vw, 900px);
+            overflow-wrap: anywhere;
             box-shadow: 0 0 30px rgba(255, 20, 147, 0.6), 0 0 60px rgba(255, 20, 147, 0.3);
             z-index: 30;
             animation: nickPulse 1.5s ease-in-out infinite;
@@ -959,18 +984,22 @@
         }
         .wheel-nick-display {
             position: absolute;
-            top: -60px;
+            top: -74px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, var(--accent-neon-blue), rgba(255, 20, 147, 0.8));
             color: #fff;
-            padding: 10px 25px;
-            border-radius: 12px;
-            font-size: 22px;
+            padding: 12px 22px;
+            border-radius: 16px;
+            font-size: clamp(20px, 2vw, 30px);
             font-weight: 900;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
+            text-transform: none;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.15;
+            max-width: min(72vw, 900px);
+            overflow-wrap: anywhere;
             box-shadow: 0 0 30px rgba(255, 20, 147, 0.6), 0 0 60px rgba(255, 20, 147, 0.3);
             z-index: 30;
             animation: nickPulse 1.5s ease-in-out infinite;
@@ -979,10 +1008,17 @@
             0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 30px rgba(255, 20, 147, 0.6); }
             50% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 50px rgba(255, 20, 147, 0.8), 0 0 80px rgba(255, 20, 147, 0.4); }
         }
-        .wheel-controls {
+        #wheel-modal .wheel-controls {
             background: transparent;
             border: none;
             box-shadow: none;
+            width: 360px !important;
+            max-width: 360px;
+            flex: 0 0 360px;
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 6px;
+            margin-left: 28px !important;
         }
         .wheel-controls h3 {
             background: linear-gradient(90deg, var(--accent-neon-blue), rgba(255, 20, 147, 0.6));
@@ -1017,6 +1053,13 @@
         .wheel-btn-row .btn-main {
             flex: 1;
             margin-bottom: 0;
+        }
+        #wheelCanvas {
+            width: min(78vw, 980px);
+            height: min(78vw, 980px);
+            max-width: 100%;
+            max-height: calc(94vh - 170px);
+            display: block;
         }
         @keyframes textGlow {
             0%, 100% {
@@ -1124,6 +1167,33 @@
             .import-sidebar {
                 border-right: 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+        }
+        @media (max-width: 1180px) {
+            #wheel-modal .modal-content {
+                width: 98vw;
+                height: 96vh;
+                padding: 20px;
+            }
+            .wheel-layout {
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 18px;
+                overflow-y: auto;
+            }
+            #wheel-modal .wheel-controls {
+                width: 100%;
+                max-width: none;
+                flex: 0 0 auto;
+                padding-right: 0;
+                margin-left: 0 !important;
+            }
+            #wheelCanvas {
+                max-height: min(58vh, 78vw);
+            }
+            .wheel-nick-display {
+                top: -64px;
+                max-width: calc(100vw - 80px);
             }
         }
         /* SIMPLE PERCENTAGE ROULETTE STYLES */
@@ -2646,6 +2716,7 @@
             }
             const wheelModal = document.getElementById('wheel-modal');
             wheelModal.style.display = 'flex';
+            resizeWheelCanvas();
             // синхронизируем чекбокс автокрута
             const autos = document.getElementById('autoskip-checkbox');
             if (autos) autos.checked = !!autoSpinEnabled;
@@ -2767,6 +2838,25 @@
             nickDisplay.textContent = participantUnderArrow;
         }
 
+        function resizeWheelCanvas() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            const isNarrow = window.innerWidth <= 1180;
+            const horizontalPadding = isNarrow ? 56 : 500;
+            const verticalPadding = isNarrow ? 260 : 150;
+            const size = Math.max(320, Math.floor(Math.min(
+                window.innerWidth - horizontalPadding,
+                window.innerHeight - verticalPadding,
+                980
+            )));
+            if (canvas.width !== size || canvas.height !== size) {
+                canvas.width = size;
+                canvas.height = size;
+            }
+            canvas.style.width = `${size}px`;
+            canvas.style.height = `${size}px`;
+        }
+
         function drawWheel(angle) {
             const canvas = document.getElementById('wheelCanvas');
             const ctx = canvas.getContext('2d');
@@ -2813,25 +2903,25 @@
                 ctx.save();
                 ctx.translate(cx, cy);
                 ctx.rotate(angle + i * slice + slice / 2);
-                const textRadius = r * 0.4; // увеличиваем радиус текста для лучшей видимости
-                const maxArcWidth = slice * textRadius * 0.85; // немного уменьшаем ширину для лучшего размещения
+                const textRadius = r * 0.5; // увеличиваем радиус текста для лучшей видимости
+                const maxArcWidth = slice * textRadius * 0.96; // немного уменьшаем ширину для лучшего размещения
                 // Адаптивный размер шрифта в зависимости от количества участников
                 let maxFont, minFont;
                 if (p.length <= 5) {
-                    maxFont = 20;
-                    minFont = 14;
+                    maxFont = 28;
+                    minFont = 18;
                 } else if (p.length <= 10) {
-                    maxFont = 16;
-                    minFont = 11;
+                    maxFont = 24;
+                    minFont = 15;
                 } else if (p.length <= 20) {
-                    maxFont = 13;
-                    minFont = 9;
+                    maxFont = 20;
+                    minFont = 12;
                 } else if (p.length <= 40) {
-                    maxFont = 11;
-                    minFont = 7;
+                    maxFont = 16;
+                    minFont = 10;
                 } else {
-                    maxFont = 9;
-                    minFont = 6;
+                    maxFont = 13;
+                    minFont = 8;
                 }
                 let displayName = String(name || '');
                 let chosenFont = maxFont;
@@ -2846,7 +2936,7 @@
                     // Обрезаем имя постепенно, пока оно не поместится
                     while (txt.length > 1) {
                         txt = txt.slice(0, -1);
-                        const test = txt + '…';
+                        const test = txt + '...';
                         if (ctx.measureText(test).width <= maxArcWidth) { 
                             displayName = test; 
                             break; 
@@ -2854,13 +2944,14 @@
                     }
                     // Если даже одна буква не помещается, показываем минимум
                     if (displayName.length > 1 && ctx.measureText(displayName).width > maxArcWidth) {
-                        displayName = displayName.substring(0, 1) + '…';
+                        displayName = displayName.substring(0, 1) + '...';
                     }
                 }
                 ctx.fillStyle = '#ffffff';
                 ctx.font = `bold ${chosenFont}px Inter`;
                 ctx.shadowBlur = 6;
                 ctx.shadowColor = 'rgba(0,0,0,0.9)';
+                ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(displayName, textRadius, 0);
                 ctx.restore();
@@ -3025,6 +3116,14 @@
         try { loadSiteOptionsFromCloud(); subscribeSiteOptionsFromCloud(); } catch(e) { try { renderSiteSelects(); renderSiteOptionsList(); } catch(_) {} }
         renderLeaderboard();
         updateFullParticipantsList();
+        window.addEventListener('resize', () => {
+            const wheelModal = document.getElementById('wheel-modal');
+            if (wheelModal && wheelModal.style.display === 'flex') {
+                resizeWheelCanvas();
+                drawWheel(currentRotation || 0);
+            }
+        });
+
         // load wheel participants from localStorage (if any)
         try { wheelParticipants = JSON.parse(localStorage.getItem('bot_wheel_participants') || '[]'); } catch(e) { wheelParticipants = []; }
         setImportFormat('csv');
@@ -3994,3 +4093,5 @@
 
 </body>
 </html>
+
+
