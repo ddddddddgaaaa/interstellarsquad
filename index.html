@@ -6,15 +6,15 @@
     <link rel="icon" href="https://img.sanishtech.com/u/7f1ab1e682964b5a1582054dd0e5ff08.jpg">
     <style>
         :root {
-            --bg-color: #0a1929; /* Changed from #071528 to a blue base */
-            --panel-bg: rgba(18, 43, 70, 0.92); /* Adjusted panel background to complement blue */
-            --dark-purple: #1b2a48; /* Changed to blue variant */
-            --accent-neon-blue: #00e9f5; /* Changed to cyan neon */
-            --accent-neon-purple: #00e9f5; /* Changed to cyan neon */
-            --accent-soft-bg: rgba(0, 233, 245, 0.08); /* Cyan accent background */
-            --accent-hover-bg: rgba(0, 233, 245, 0.22); /* Cyan hover background */
-            --accent-soft-border: rgba(0, 233, 245, 0.1); /* Cyan soft border */
-            --section-accent: #00c3ff; /* Changed to cyan/blue accent */
+            --bg-color: #0a1929; 
+            --panel-bg: rgba(18, 43, 70, 0.92); 
+            --dark-purple: #1b2a48;
+            --accent-neon-blue: #00e9f5; 
+            --accent-neon-purple: #00e9f5; 
+            --accent-soft-bg: rgba(0, 233, 245, 0.08); 
+            --accent-hover-bg: rgba(0, 233, 245, 0.22); 
+            --accent-soft-border: rgba(0, 233, 245, 0.1); 
+            --section-accent: #00c3ff; 
             --section-accent-bg: rgba(99, 102, 241, 0.08);
             --section-accent-hover: rgba(99, 102, 241, 0.22);
             --section-accent-panel: rgba(99, 102, 241, 0.12);
@@ -585,7 +585,9 @@
             text-shadow: none !important;
         }
         #leaderboard {
-            background: linear-gradient(180deg, #0a1929 0%, #071528 50%, #0a1a35 100%);
+            background:
+                linear-gradient(180deg, rgba(3, 7, 18, 0.8) 0%, rgba(3, 7, 18, 0.62) 38%, rgba(3, 7, 18, 0.88) 100%),
+                url('https://c.wallhere.com/photos/5a/f1/all_the_heroes_dota_2_dota-1011501.jpg!d') center center / cover no-repeat;
             border-radius: 16px;
             padding: 16px;
             border: 1px solid var(--panel-border);
@@ -612,12 +614,13 @@
         #leaderboard::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,233,245,0.4), transparent);
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(3, 7, 18, 0.78) 0%, rgba(3, 7, 18, 0.18) 22%, rgba(3, 7, 18, 0.18) 78%, rgba(3, 7, 18, 0.78) 100%),
+                linear-gradient(180deg, rgba(3, 7, 18, 0.08) 0%, rgba(3, 7, 18, 0.3) 55%, rgba(3, 7, 18, 0.72) 100%);
+            border-radius: 16px;
             z-index: 2;
+            pointer-events: none;
         }
         #win-nick.winner-responded,
         #win-status-label.winner-responded {
@@ -1419,7 +1422,7 @@
             </div>
         </div>
         <div class="panel panel-with-bg" style="padding: 15px;">
-            <div class="animated-header" id="participation-header">interstellarsquad ㅤㅤㅤㅤㅤㅤㅤㅤㅤ ДЛЯ УЧАСТИЯ В РОЗЫГРЫШЕ + В ЧАТㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤinterstellarsquad</div>
+            <div class="animated-header" id="participation-header">interstellarsquad ㅤㅤㅤㅤㅤㅤㅤㅤㅤ ДЛЯ УЧАСТВИЯ В РОЗЫГРЫШЕ + В ЧАТㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤinterstellarsquad</div>
             <div class="middle-split">
                 <div class="red-participants">
                     <h4>СПИСОК УЧАСТНИКОВ <span id="user-count" style="font-size: 18px; color: var(--accent-neon-blue); font-weight: 800;">0</span></h4>
@@ -2152,7 +2155,7 @@
         function updateParticipationHeader() {
             const header = document.getElementById('participation-header');
             if (header) {
-                header.textContent = `ДЛЯ УЧАСТИЯ В РОЗЫГРЫШЕ "${currentCodeword}" В ЧАТ`;
+                header.textContent = `ДЛЯ УЧАСТВИЯ В ПРОКАЧКЕ "${currentCodeword}" В ЧАТ`;
             }
         }
         function openAuthModal() {
